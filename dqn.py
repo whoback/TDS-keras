@@ -44,3 +44,30 @@ def __init__(self, env):
     self.model = self.create_model()
     # tracks actions we want model to take
     self.target_model = self.create_model()
+
+
+# add to memory when going through trials
+def remember(self, state, action, reward, new_state, done):
+    # need to store done phase for updating reward function
+    self.memory.append([state, action, reward, new_state, done])
+
+
+# training phase
+def replay(self):
+    batch_size = 32
+    if len(self.memory) < batch_size:
+        return
+    # take a random sample from memory storage
+    samples = random.sample(self.memory, batch_size)
+    # update Q function  as sum of cur reward and expected future reward
+    # depricate that by gamma
+    # hanlde terminal / non-terminal states
+    for sample in samples:
+        state, action, reward, new_state, done = sample
+        target = self.target_model.predict(state)
+        if done:
+            target[0][action] = reward
+        else:
+            Q_future = max(self.target_model.predict(new_state)[0])
+            target[0][action] = reward + Q_future * self.gamma
+        self.model.fit(state, target, epochs=1, verbose=0)
