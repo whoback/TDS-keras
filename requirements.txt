@@ -17,7 +17,7 @@ numpy==1.18.1
 pathspec==0.7.0
 pyglet==1.4.10
 pylint==2.4.4
-PyYAML==5.3
+PyYAML==5.4
 regex==2020.1.8
 scipy==1.4.1
 six==1.14.0
